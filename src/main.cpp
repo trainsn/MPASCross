@@ -498,13 +498,14 @@ int main(int argc, char **argv)
 	// render loop
 	// -----------
 	//while (!glfwWindowShouldClose(window))
-	//for (int layer_id = 0; layer_id < nVertLevels; layer_id++)
+	for (int layer_id = 0; layer_id < 9; layer_id++)
 	{
 		float bottom = 0.0f;
 		for (int i = 0; i < nVertLevels; i++) {
 			bottom += maxThickness[i];
 		}
-		float threshold = 0.0f;
+		int lat = -60 + layer_id * 15;
+		float threshold = lat;
 		//threshold = (threshold - bottom / 2.0f) / (bottom / 2.0f);
 		threshold = threshold / 90.0f;
 
@@ -624,7 +625,7 @@ int main(int argc, char **argv)
 
 		stbi_flip_vertically_on_write(1);
 		char imagepath[1024];
-		sprintf(imagepath, "/fs/project/PAS0027/MPAS1/Results/%s/equator.png", fileid.c_str());
+		sprintf(imagepath, "/fs/project/PAS0027/MPAS1/Results/%s/lat%d.png", fileid.c_str(), lat);
 		float* pBuffer = new float[SCR_WIDTH * SCR_HEIGHT * 4];
 		unsigned char* pImage = new unsigned char[SCR_WIDTH * SCR_HEIGHT * 3];
 		glReadBuffer(GL_BACK);
