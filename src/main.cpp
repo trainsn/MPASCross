@@ -433,18 +433,19 @@ void setUpgBuffer() {
 
 int main(int argc, char **argv)
 {
-    char input_name[1024];
-	sprintf(input_name, argv[1]);
-	fprintf(stderr, "%s\n", argv[1]);
-    
-	string input_name_s = input_name;
-	int pos_last_dot = input_name_s.rfind(".");
-	int pos_last_dash = input_name_s.rfind("_");
-	int simIdx = stoi(input_name_s.substr(0, pos_last_dash));
-	float BwsA = stof(input_name_s.substr(pos_last_dash + 1, pos_last_dot - pos_last_dash - 1));
-
+    char filename[1024];
+	sprintf(filename, argv[1]);
+	fprintf(stderr, "%s\n", argv[1]); 
+	
+	string filename_s = filename;
+	int pos_last_dot = filename_s.rfind(".");
+	string input_name = filename_s.substr(0, pos_last_dot);
+    int pos_first_dash = filename_s.find("_");
+	string fileid = filename_s.substr(0, pos_first_dash);
+	
 	char input_path[1024];
-	sprintf(input_path, "/fs/project/PAS0027/MPAS/Results/%s", input_name);
+	sprintf(input_path, "/fs/project/PAS0027/MPAS1/Results/%s", filename);
+ 	
  	loadMeshFromNetCDF(input_path);
 
 	// glfw: initialize and configure
@@ -499,14 +500,13 @@ int main(int argc, char **argv)
 	//while (!glfwWindowShouldClose(window))
 	//for (int layer_id = 0; layer_id < nVertLevels; layer_id++)
 	{
-
 		float bottom = 0.0f;
 		for (int i = 0; i < nVertLevels; i++) {
 			bottom += maxThickness[i];
 		}
 		float threshold = 0.0f;
 		//threshold = (threshold - bottom / 2.0f) / (bottom / 2.0f);
-		threshold = threshold * 2.0f / (float)M_PI;
+		threshold = threshold / 90.0f;
 
 		center = glm::vec3(0.0f, -1.0f, 0.0f);
 		eye = glm::vec3(0.0f, 0.0f, 0.0f);
@@ -609,7 +609,7 @@ int main(int argc, char **argv)
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, gScalar);
 
-		float tMin = -1.75f, tMax = 29.8f;
+		float tMin = -1.93f, tMax = 30.35f;
 		/*for (int i = 0; i < temperature.size(); i += nVertLevels) {
 			if (temperature[i] < tMin)
 				tMin = temperature[i];
@@ -624,7 +624,7 @@ int main(int argc, char **argv)
 
 		stbi_flip_vertically_on_write(1);
 		char imagepath[1024];
-		sprintf(imagepath, "../res/0000_3.27890.png");
+		sprintf(imagepath, "/fs/project/PAS0027/MPAS1/Results/%s/equator.png", fileid.c_str());
 		float* pBuffer = new float[SCR_WIDTH * SCR_HEIGHT * 4];
 		unsigned char* pImage = new unsigned char[SCR_WIDTH * SCR_HEIGHT * 3];
 		glReadBuffer(GL_BACK);
