@@ -444,7 +444,7 @@ int main(int argc, char **argv)
 	string fileid = filename_s.substr(0, pos_first_dash);
 	
 	char input_path[1024];
-	sprintf(input_path, "/fs/project/PAS0027/MPAS1/Results/%s", filename);
+	sprintf(input_path, "/fs/project/PAS0027/MPAS1/Inter/%s", filename);
  	
  	loadMeshFromNetCDF(input_path);
 
@@ -625,7 +625,7 @@ int main(int argc, char **argv)
 
 		stbi_flip_vertically_on_write(1);
 		char imagepath[1024];
-		sprintf(imagepath, "/fs/project/PAS0027/MPAS1/Results/%s/lat%d.png", fileid.c_str(), lat);
+		sprintf(imagepath, "/fs/project/PAS0027/MPAS1/Inter/%s/lat%d.png", fileid.c_str(), lat);
 		float* pBuffer = new float[SCR_WIDTH * SCR_HEIGHT * 4];
 		unsigned char* pImage = new unsigned char[SCR_WIDTH * SCR_HEIGHT * 3];
 		glReadBuffer(GL_BACK);
