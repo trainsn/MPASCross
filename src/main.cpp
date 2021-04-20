@@ -444,7 +444,8 @@ int main(int argc, char **argv)
 	string fileid = filename_s.substr(0, pos_first_dash);
 	
 	char input_path[1024];
-	sprintf(input_path, "/fs/project/PAS0027/MPAS1/Results/%s", filename);
+	sprintf(input_path, "/fs/project/PAS0027/MPAS1/Inter/%s", filename);
+ 	
  	
  	loadMeshFromNetCDF(input_path);
 
@@ -498,24 +499,24 @@ int main(int argc, char **argv)
 	// render loop
 	// -----------
 	//while (!glfwWindowShouldClose(window))
-	for (int layer_id = 0; layer_id < 9; layer_id++)
+ 	for (int layer_id = 0; layer_id < 12; layer_id++)
 	{
 		float bottom = 0.0f;
 		for (int i = 0; i < nVertLevels; i++) {
 			bottom += maxThickness[i];
 		}
-		int lat = -60 + layer_id * 15;
-		float threshold = lat;
-		//threshold = (threshold - bottom / 2.0f) / (bottom / 2.0f);
-		threshold = threshold / 90.0f;
+// 		int lat = -60 + layer_id * 15;
+        int lon = 15 + layer_id * 30;
+		float threshold = (lon - 180.0f) / 180.0f;
+		//float threshold = lat / 80.0f;
 
-		center = glm::vec3(0.0f, -1.0f, 0.0f);
+		center = glm::vec3(1.0f, 0.0f, 0.0f);
 		eye = glm::vec3(0.0f, 0.0f, 0.0f);
 		up = glm::vec3(0.0f, 0.0f, -1.0f);
 
 		view = glm::lookAt(eye, center, up);
 		model = glm::translate(glm::vec3(-(float)M_PI, 0.0f, -bottom / 2.0)); 
-		model = glm::scale(glm::vec3(1.0f / (float)M_PI, 2.0f / (float)M_PI, 2.0f / bottom)) * model;
+		model = glm::scale(glm::vec3(1.0f / (float)M_PI, 2.0f / (float)M_PI * 9.0f / 8.0f, 2.0f / bottom)) * model;
 			
 		mvMatrix = view * model;
 
@@ -625,7 +626,7 @@ int main(int argc, char **argv)
 
 		stbi_flip_vertically_on_write(1);
 		char imagepath[1024];
-		sprintf(imagepath, "/fs/project/PAS0027/MPAS1/Results/%s/lat%d.png", fileid.c_str(), lat);
+		sprintf(imagepath, "/fs/project/PAS0027/MPAS1/Inter/%s/lon%d.png", fileid.c_str(), lon);
 		float* pBuffer = new float[SCR_WIDTH * SCR_HEIGHT * 4];
 		unsigned char* pImage = new unsigned char[SCR_WIDTH * SCR_HEIGHT * 3];
 		glReadBuffer(GL_BACK);
