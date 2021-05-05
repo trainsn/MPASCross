@@ -498,15 +498,18 @@ int main(int argc, char **argv)
 	// render loop
 	// -----------
 	//while (!glfwWindowShouldClose(window))
-	for (int layer_id = 0; layer_id < 9; layer_id++)
+	//for (int layer_id = 0; layer_id < 9; layer_id++)
+	int layer_id = 4;
 	{
-		float bottom = 0.0f;
+// 		float bottom = 200.0f;
+        float bottom = 0.0f;
 		for (int i = 0; i < nVertLevels; i++) {
 			bottom += maxThickness[i];
 		}
+		cout << bottom << endl;
 		int lat = -60 + layer_id * 15;
 		float threshold = lat;
-		//threshold = (threshold - bottom / 2.0f) / (bottom / 2.0f);
+// 		threshold = (threshold - bottom / 2.0f) / (bottom / 2.0f);
 		threshold = threshold / 90.0f;
 
 		center = glm::vec3(0.0f, -1.0f, 0.0f);
@@ -516,6 +519,8 @@ int main(int argc, char **argv)
 		view = glm::lookAt(eye, center, up);
 		model = glm::translate(glm::vec3(-(float)M_PI, 0.0f, -bottom / 2.0)); 
 		model = glm::scale(glm::vec3(1.0f / (float)M_PI, 2.0f / (float)M_PI, 2.0f / bottom)) * model;
+//      model = glm::translate(glm::vec3(-220.0f / 180.0f * (float)M_PI, 0.0f, -bottom / 2.0)); 
+// 		model = glm::scale(glm::vec3(3.0f / (float)M_PI, 7.0f / (float)M_PI , 2.0f / bottom)) * model;
 			
 		mvMatrix = view * model;
 
@@ -625,7 +630,7 @@ int main(int argc, char **argv)
 
 		stbi_flip_vertically_on_write(1);
 		char imagepath[1024];
-		sprintf(imagepath, "/fs/project/PAS0027/MPAS1/Inter/%s/lat%d.png", fileid.c_str(), lat);
+		sprintf(imagepath, "/fs/project/PAS0027/MPAS1/Inter/%s/gray_lat%d.png", fileid.c_str(), lat);
 		float* pBuffer = new float[SCR_WIDTH * SCR_HEIGHT * 4];
 		unsigned char* pImage = new unsigned char[SCR_WIDTH * SCR_HEIGHT * 3];
 		glReadBuffer(GL_BACK);
