@@ -22,6 +22,7 @@
 #define STBI_MSC_SECURE_CRT
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 #include "stb_image_write.h"
+#include "snapshots.h"
 using namespace std;
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
@@ -435,16 +436,18 @@ int main(int argc, char **argv)
 {
     char filename[1024];
 	sprintf(filename, argv[1]);
-	fprintf(stderr, "%s\n", argv[1]); 
+	char timeid[1024];
+	sprintf(timeid, argv[2]);
+	int timestep;
+	sscanf(timeid, "%d", &timestep);
+	fprintf(stderr, "%s/%s\n", argv[1], snapshots[timestep].c_str()); 
 	
-	string filename_s = filename;
-	int pos_last_dot = filename_s.rfind(".");
-	string input_name = filename_s.substr(0, pos_last_dot);
-    int pos_first_dash = filename_s.find("_");
-	string fileid = filename_s.substr(0, pos_first_dash);
+	string input_name = filename;
+    int pos_first_dash = input_name.find("_");
+	string fileid = input_name.substr(0, pos_first_dash);
 	
 	char input_path[1024];
-	sprintf(input_path, "/fs/project/PAS0027/MPAS1/Inter/%s", filename);
+	sprintf(input_path, "/fs/project/PAS0027/MPAS2/Results/%s/%s", filename, snapshots[timestep].c_str());
  	
  	loadMeshFromNetCDF(input_path);
 
@@ -625,7 +628,7 @@ int main(int argc, char **argv)
 
 		stbi_flip_vertically_on_write(1);
 		char imagepath[1024];
-		sprintf(imagepath, "/fs/project/PAS0027/MPAS1/Inter/%s/lat%d.png", fileid.c_str(), lat);
+		sprintf(imagepath, "/fs/project/PAS0027/MPAS2/Results/%s/t%s/lat%d.png", fileid.c_str(), timeid, lat);
 		float* pBuffer = new float[SCR_WIDTH * SCR_HEIGHT * 4];
 		unsigned char* pImage = new unsigned char[SCR_WIDTH * SCR_HEIGHT * 3];
 		glReadBuffer(GL_BACK);
